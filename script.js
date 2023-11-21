@@ -20,24 +20,37 @@ request.addEventListener("load", function() {
 request.open ("GET", "https://reqres.in/api/users?page=2");
 request.send ();
 //fetch
+
 fetch('https://reqres.in/api/unknown', {
     method: 'GET'
 })
-.then(function(resp) {console.log(resp)
-    if (resp.status !== 200); {
+.then(function(resp) {
+    console.log(resp);
+    if (resp.status !== 200) {
         throw "error";
     }
     return resp.json();
 })
 .then(function(data) {
     let ulElement = document.createElement('ul');
+    const fragment = document.createDocumentFragment();
     data.data.forEach(item => {
         let liElement = document.createElement('li');
         liElement.textContent = `${item.name} ${item.color}`;
-        ulElement.appendChild(liElement);
+        fragment.appendChild(liElement);
     });
+    ulElement.appendChild(fragment);
     document.getElementById("info").appendChild(ulElement);
 })
 .catch(function(error) {
     console.log(error);
+    if (error == "error") {
+        let p = document.createElement('p');
+        p.textContent = "გვერდი ვერ მოიძებნა";
+        document.getElementById("info").appendChild(p);
+    } else {
+        let p = document.createElement('p');
+        p.textContent = "ვერ მოიძებნა";
+        document.getElementById("info").appendChild(p);
+    }
 });
